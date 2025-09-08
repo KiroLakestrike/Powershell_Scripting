@@ -14,10 +14,10 @@ while ($true) {
     $newCount = (Get-ChildItem $folderPath).Count 
 
     #Check if the number has changed and Give an Alert message if it did. 
-    if (-not $fileCount -eq $newCount){
-        Write-Host "ALERT!!! Red Spy is in the Base! He came to fuck Scouts Mother" -ForegroundColor Red
+    if ($newCount -ne $fileCount){
+        Write-Host "ALERT!!! Red Spy is in the Base! He came for Scouts Mother" -ForegroundColor Red
         break
     } else {
-        Write-Host "All accourding to Plan: Original Number $fileCount current Number: $newCount" -ForegroundColor Green
+        Write-Host "All according to Plan: Original Number $fileCount current Number: $newCount" -ForegroundColor Green
     }
 }
