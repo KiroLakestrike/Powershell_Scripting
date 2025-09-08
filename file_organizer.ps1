@@ -1,6 +1,10 @@
 # Tool to filter Documents, and move them to specific folders. 
 
-#First we generate a Hashmap with all the wanted formats
+# Create a Hashmap with all the Extensions, and where to move them
+
+# Feel free to add or Remove Types. and Folders as you wish
+# Syntax is ".type" = "Folder"
+
 $categoryMap = @{
 ".txt" = "Documents"
 ".pdf" = "Documents"
@@ -17,6 +21,10 @@ $categoryMap = @{
 ".rar" = "Archives"
 ".7z" = "Archives"
 }
+
+# Any other type will be moved to a "Miscellaneous" folder
+$unknownExtensions = @{}
+
 
 Set-Location "C:\Users\$env:USERNAME\Desktop"
 
@@ -57,6 +65,15 @@ foreach ($file in Get-ChildItem -File) {
         # move the file to its category
         Move-FileToCategory $file $categoryMap[$extension]
         $categorizedCount++
+    } else {
+        Move-FileToCategory $file "Miscellaneous"
+        $categorizedCount++
+
+        if ($unknownExtensions.ContainsKey($extension)) {
+            $unknownExtensions[$extension]++
+        } else {
+            $unknownExtensions[$extension] = 1
+        }
     }
     # Note: Files not in our Map, will be left in place
 }
@@ -64,3 +81,8 @@ foreach ($file in Get-ChildItem -File) {
 # Print out how many files were moved
 Write-Host "`nCategorized $categorizedCount file(s)`n"
 
+Write-Host "`nFound the following Extra types:"
+# At the end Loop through all the Extra extensions and their count. 
+foreach ($element in $unknownExtensions.Keys) {
+    Write-Host "The Extension $element was found $($unknownExtensions[$element]) times"
+}
